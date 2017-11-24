@@ -125,12 +125,23 @@ int main(int argc, char **argv)
 		fwrite(&aux,1,1,out);
 	}
 
+
 	//Se escribe imagen en archivo de salida
    	for (int i = 0; i <filas; ++i){			//Escribiendo imagen en archivo de salida
 		for (int j = 0; j < (columnas/m); ++j){
 			fwrite(&imReducida[i][j], 4, 1, out);
 		}
 	}
+
+	fseek(out, 18, SEEK_SET);	//SEEK hasta 16 donde está
+								//la información de resolución.
+
+	//Se escribe nueva resolución de la imagen en el header del archivo de salida
+	int im_width_out = im_width/m;
+	int im_height_out = im_height;
+	fwrite(&im_width_out,4,1,in);
+	fwrite(&im_height_out,4,1,in);
+
 	fclose(out);
 
 
