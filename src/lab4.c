@@ -49,7 +49,7 @@ int i,j,z;
 
    	for (i = 0; i <im_height; ++i){			//Guardando valores de cada pixel
 		for (j = 0; j < im_width; ++j){
-			fread(&im[i][j],4,1,in);
+			fread(&im[i][j],3,1,in);
 		}
 	}
 
@@ -138,7 +138,7 @@ int i,j,z;
 	//Se escribe imagen en archivo de salida
    	for (int i = 0; i <filas; ++i){			//Escribiendo imagen en archivo de salida
 		for (j = 0; j < (columnas/m); ++j){
-			fwrite(&imReducida[i][j], 4, 1, out);
+			fwrite(&imReducida[i][j], 3, 1, out);
 		}
 	}
 
