@@ -57,7 +57,8 @@ int i,j,z;
 	//METODO 1 
 
 
-	int m=4;
+	int m=2;
+	int n=20;
 	int filas=im_height;
 	int columnas=im_width;
 
@@ -67,6 +68,11 @@ int i,j,z;
 
 	int **imReducida=NULL;
 	imReducida=(int **)malloc(sizeof(int*)*filas);
+
+
+	int s=0;
+
+
 	for (i = 0; i < filas; ++i){
 		imReducida[i]=(int*)malloc(sizeof(int)*(columnas/m));
 		for (z = 0; z < (columnas/m); ++z)
@@ -78,7 +84,7 @@ int i,j,z;
 
 
 	for(i=0;i<filas;i++){
-		if(i % 2==0){
+		if(2==2){
 			//printf("promedio fila par\n");		
 			//se recorren la fila de forma creciente
 			int posCorte=0;
@@ -99,7 +105,7 @@ int i,j,z;
 				}
 			}
 		}
-		if(i%2==1){
+		/*if(i%2==1){
 			//printf("promedio fila impar\n");
 				int posCorte=(columnas/m)-1;
 				int aux=0;
@@ -121,10 +127,11 @@ int i,j,z;
 					posCorte--;
 				}
 			}
-		}
+		}*/
 //printf("\n");
 
 	}
+
 
 	fseek(in, 0, SEEK_SET);
 	for (i = 0; i<54; i++){
