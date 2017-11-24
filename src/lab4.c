@@ -25,12 +25,19 @@ int i,j,z;
 	int im_width;		// Para guardar el ancho
 	int im_height;		// Para guardar el alto
 
+	int im_resx;
+	int im_resy;
+
 
 	fseek(in, 18, SEEK_SET);	//SEEK hasta 16 donde está
-
-								//la información de resolución.
+								//la información de ancho y alto.
 	fread(&im_width,4,1,in);
 	fread(&im_height,4,1,in);
+
+	fseek(in, 38, SEEK_SET);	//SEEK hasta 38 donde está
+								//la información de resolución.
+	fread(&im_resx,4,1,in);
+	fread(&im_resy,4,1,in);
 
 	fseek(in, 54, SEEK_SET);	//SEEK hasta donde empiezan los valores de los pixeles
 
@@ -39,6 +46,8 @@ int i,j,z;
 
    	printf("Ancho: %d\n", im_width);
    	printf("Alto: %d\n", im_height);
+   	printf("Resolución X: %d\n", im_resx);
+   	printf("Resolución Y: %d\n", im_resy);
 
 
 
@@ -95,6 +104,7 @@ int i,j,z;
 					//printf("posCorte=%d\n",posCorte);
 					suma=suma+im[i][j];
 					contador++;
+					posCorte++;
 				}
 				else{
 					//printf("%d||",(suma/m) );
@@ -149,14 +159,27 @@ int i,j,z;
 		}
 	}
 
-	fseek(out, 18, SEEK_SET);	//SEEK hasta 16 donde está
-								//la información de resolución.
 
 	//Se escribe nueva resolución de la imagen en el header del archivo de salida
 	int im_width_out = im_width/m;
 	int im_height_out = im_height;
+	int im_resx_out = im_resx;
+	int im_resy_out = im_resy;
+
+	fseek(out, 18, SEEK_SET);	//SEEK hasta 16 donde está
+								//la información de ancho y alto.
 	fwrite(&im_width_out,4,1,out);
 	fwrite(&im_height_out,4,1,out);
+
+	fseek(out, 38, SEEK_SET);	//SEEK hasta 38 donde está
+								//la información de resolución.
+	fwrite(&im_resx_out,4,1,out);
+	fwrite(&im_resy_out,4,1,out);
+
+	printf("Ancho Salida: %d\n", im_width_out);
+   	printf("Alto Salida: %d\n", im_height_out);
+   	printf("Resolución X Salida: %d\n", im_resx_out);
+   	printf("Resolución Y Salida: %d\n", im_resy_out);
 
 	fclose(out);
 
