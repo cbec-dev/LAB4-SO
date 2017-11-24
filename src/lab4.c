@@ -9,7 +9,7 @@
 #include <math.h>
 
 
-
+void reduccionPorFilas(int n, int m, int filas,int columnas, int **im,FILE *in);
 
 int main(int argc, char **argv)
 {
@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 	in = fopen(fileName, "rb");		//Se abre la imagen
 	int im_width;		// Para guardar el ancho
 	int im_height;		// Para guardar el alto
-	printf("hola\n");
+
 
 	fseek(in, 18, SEEK_SET);	//SEEK hasta 16 donde está
 
@@ -53,8 +53,132 @@ int main(int argc, char **argv)
 	}
 
 
+	//METODO 1 
 
-	
+
+	int m=4;
+	int filas=im_height;
+	int columnas=im_width;
+
+
+	FILE *out;
+	out = fopen(outName, "wb");
+
+	int **imReducida=NULL;
+	imReducida=(int **)malloc(sizeof(int*)*filas);
+	for (int i = 0; i < filas; ++i){
+		imReducida[i]=(int*)malloc(sizeof(int)*(columnas/m));
+	}
+
+
+
+	for(int i=0;i<filas;i++){
+		if(i%filas==0){
+			//printf("promedio fila par\n");		
+			//se recorren la fila de forma creciente
+			int posCorte=0;
+			int contador=0;
+			int suma=0;
+			for (int j = 0; j <columnas ; ++j){
+				if (contador<m){
+					//printf("posCorte=%d\n",posCorte);
+					suma=suma+im[i][j];
+					contador++;
+				}
+				else{
+					printf("%d\n",(suma/m) );
+					imReducida[i][posCorte]=(suma/m);
+					contador=0;
+					suma=0;
+					posCorte++;
+				}
+			}
+		}
+		if(i%filas==1){
+			//printf("promedio fila impar\n");
+							int posCorte=(columnas/m)-1;
+				int contador=0;
+				int suma=0;
+			//se recorren las filas de forma decreciente
+			for (int j = (columnas/m)-1; j >= 0; --j){
+				if (contador<m){
+					//printf("posCorte=%d\n",posCorte);
+					suma=suma+im[i][j];
+					contador++;
+				}
+				else{
+					printf("%d\n",(suma/m) );
+					imReducida[i][posCorte]=(suma/m);
+					contador=0;
+					suma=0;
+					posCorte--;
+				}
+			}
+		}
+	}
+
+	fseek(in, 0, SEEK_SET);
+	for (int i = 0; i<54; i++){
+		int aux;
+		fread(&aux,1,1,in);
+		printf("%i\n", aux);
+		fwrite(&aux,1,1,out);
+	}
+
+	//Se escribe imagen en archivo de salida
+   	for (int i = 0; i <filas; ++i){			//Escribiendo imagen en archivo de salida
+		for (int j = 0; j < (columnas/m); ++j){
+			fwrite(&imReducida[i][j], 4, 1, out);
+		}
+	}
+	fclose(out);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	fclose(in);
+
+	/*
 	//Se escribe header BMP en archivo de salida
 	FILE *out;
 	out = fopen(outName, "wb");
@@ -62,7 +186,7 @@ int main(int argc, char **argv)
 	for (int i = 0; i<54; i++){
 		int aux;
 		fread(&aux,1,1,in);
-		printf("%i\n", aux);
+		//printf("%i\n", aux);
 		fwrite(&aux,1,1,out);
 	}
 
@@ -77,7 +201,71 @@ int main(int argc, char **argv)
 		}
 	}
 
-	fclose(out);
+	fclose(out);*/
 	return 0;
 
+}
+
+
+void reduccionPorFilas(int n, int m, int filas,int columnas, int **im,FILE *in){
+	FILE *out;
+	out = fopen("salida1", "w");
+
+	int **imReducida=NULL;
+	imReducida=(int **)malloc(sizeof(int*)*filas);
+	for (int i = 0; i < filas; ++i){
+		imReducida[i]=(int*)malloc(sizeof(int)*(columnas/m));
+	}
+
+	for(int i=0;i<filas;i++){
+		if(i%filas==0){
+			int posCorte=0;
+			//se recorren la fila de forma creciente
+			for (int j = 0; j <columnas ; ++j){
+				int contador=0;
+				int suma=0;
+				if (contador<m){
+					suma=suma+im[i][j];
+				}
+				else{
+					imReducida[i][posCorte]=(suma/m);
+					contador=0;
+					suma=0;
+					posCorte++;
+				}
+			}
+		}
+		if(i%filas==1){
+			int posCorte=(columnas/m)-1;
+			//se recorren las filas de forma decreciente
+			for (int j = (columnas/m)-1; j >= 0; --j){
+				int contador=0;
+				int suma=0;
+				if (contador<m){
+					suma=suma+im[i][j];
+				}
+				else{
+					imReducida[i][posCorte]=(suma/m);
+					contador=0;
+					suma=0;
+					posCorte--;
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i<54; i++){
+		int aux;
+		fread(&aux,1,1,in);
+		printf("%i\n", aux);
+		fwrite(&aux,1,1,out);
+	}
+
+	//Se escribe imagen en archivo de salida
+   	for (int i = 0; i <filas; ++i){			//Escribiendo imagen en archivo de salida
+		for (int j = 0; j < (columnas/m); ++j){
+			fwrite(&imReducida[i][j], 4, 1, out);
+		}
+	}
+	fclose(out);
 }
