@@ -17,14 +17,73 @@ int main(int argc, char **argv)
 	clock_t start_t, end_t, total_t;	//Para medir tiempos
 	start_t = clock();
 	printf("Inicio: %ld\n", start_t);
-	int m=3; //Pixeles a promediar
-	int n=2; //Número de iteraciones
-	int d=3; //Imprimir o no por pantalla
-	int o=1; //Método a usar
-	char fileName[4096];
-	char outName[4096];
-	strcpy(fileName, "laguna.bmp");
-	strcpy(outName, "out");
+	int m=0; //Pixeles a promediar
+	int n=0; //Número de iteraciones
+	int d=0; //Imprimir o no por pantalla
+	int o=0; //Método a usar
+	char *fileName=NULL;
+	char *outName=NULL;
+	char *outName2=NULL;
+
+
+
+	int index;
+	int c;
+	opterr = 0;
+		while ((c = getopt (argc, argv, "i:s:g:n:m:o:d:")) != -1)	
+		switch (c)
+		{
+		case 'i':
+			fileName = optarg;
+			break;
+		case 's':
+			outName = optarg;
+			break;
+		case 'g':
+			outName2 = optarg;
+			break;
+		case 'n':
+			n = atoi(optarg);
+			break;
+		case 'm':
+			m = atoi(optarg);
+			break;
+		case 'o':
+			o = atoi(optarg);
+			break;
+		case 'd':
+			d = atoi(optarg);
+			break;
+		case '?':
+		if (optopt == 'c')
+			fprintf (stderr, "Opción -%c requiere un argumento.\n", optopt);
+		else if (isprint (optopt))
+		  	fprintf (stderr, "Opción desconocida `-%c'.\n", optopt);
+		else
+		  	fprintf (stderr,
+           		"Opción con caracter desconocido `\\x%x'.\n",
+				optopt);
+			return 1;
+		default:
+		abort ();
+		}
+
+
+
+
+
+	//VERIFICACION DE OPCIONES GUARDADAS CORRECTAMENTES
+	if (d==3)
+	{
+		printf("archivoEntrada: %s\n", fileName);
+		printf("archivoSalida1: %s\n", outName);
+		printf("archivoSalida2: %s\n", outName2);
+		printf("n: %d\n", n);
+		printf("m: %d\n", m);
+		printf("o: %d\n", o);
+		printf("d: %d\n", d);
+	}
+
 
 	if(d==3) printf("Estoy en la iteracion: 0\n");
 	//Se lee imagen de entrada

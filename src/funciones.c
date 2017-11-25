@@ -1,4 +1,6 @@
-
+//DESCRIPCION: Funcion que implementa el primer metodo de reduccion calculando el promedio por filas
+//ENTRADA: la imagen expresada como una matriz de pixeles, la cantidad de elementos a tomar en el rpomedio, la cantidad de filas y columnas de la matriz, una bandera, el nombre archivo salida
+//SALIDA: una nueva matriz de entero que representa los nuevos pixeles promediados
 int **reduccion1(int **im, int m, int filas, int columnas, int d, char *outName)
 {
 	//FILE *out;
@@ -81,6 +83,9 @@ int **reduccion1(int **im, int m, int filas, int columnas, int d, char *outName)
 	return imReducida;
 }
 
+//DESCRIPCION: Funcion que implementa el primer metodo de reduccion calculando el promedio por columnas
+//ENTRADA: la imagen expresada como una matriz de pixeles, la cantidad de elementos a tomar en el rpomedio, la cantidad de filas y columnas de la matriz, una bandera, el nombre archivo salida
+//SALIDA: una nueva matriz de entero que representa los nuevos pixeles promediados
 int **reduccion2(int **im, int m, int filas, int columnas, int d, char *outName)
 {
 	//FILE *out;
@@ -166,6 +171,16 @@ int **reduccion2(int **im, int m, int filas, int columnas, int d, char *outName)
 	return imReducida;
 }
 
+//DESCRIPCION: Funcion que implementa el primer metodo de reduccion calculando el promedio por filas y columnas y tomando los tienmpo de ejecucion
+//ENTRADA: la imagen expresada como una matriz de pixeles, la cantidad de elementos a tomar en el rpomedio, la cantidad de filas y columnas de la matriz, una bandera, el nombre archivo salida
+//SALIDA: una nueva matriz de entero que representa los nuevos pixeles promediados
+
+//METODO 3
+
+
+//DESCRIPCION: funcion que lee una imagen y guarda los pixeles correspondientes
+//ENTRADA: el nombre dle archivo de entrada
+//SALIDA: una matriz de entero que representa los pixeles
 int **readIm(char *fileName)
 {
 	FILE *in;
@@ -200,6 +215,9 @@ int **readIm(char *fileName)
 	return im;
 }
 
+//DESCRIPCION: funcion que obtiene la altura correspondiente a una imagen
+//ENTRADA: el nombre de la imagen
+//SALIDA: un entero correspondiente a la altura
 int getHeight(char *fileName)
 {
 	FILE *in;
@@ -218,6 +236,9 @@ int getHeight(char *fileName)
 	return im_height;
 }
 
+//DESCRIPCION: funcion que obtiene el ancho correspondiente a una imagen
+//ENTRADA: el nombre de la imagen
+//SALIDA: el ancho de la imagen
 int getWidth(char *fileName)
 {
 	FILE *in;
@@ -236,6 +257,9 @@ int getWidth(char *fileName)
 	return im_width;
 }
 
+//DESCRIPCION: funcion que obtiene el header de una imagen bmp
+//ENTRADA: el nombre de la imagen
+//SALIDA: puntero a entero con el header de la imagen
 int *getHeader(char *fileName)
 {
 	FILE *in;
@@ -255,7 +279,10 @@ int *getHeader(char *fileName)
 	fclose(in);
 	return header;
 }
-
+ 
+//DESCRIPCION: funcion que escribe un nuevo header para la imagen reducida
+//ENTRADA: el nombre de la imagen, el header anterior las nuevas dimensiones de alto y ancho
+//SALIDA: no posee retorno
 void writeHeader(char *fileName, int *header, int height, int width)
 {
 	FILE *out;
@@ -277,6 +304,9 @@ void writeHeader(char *fileName, int *header, int height, int width)
 	fclose(out);
 }
 
+//DESCRIPCION: funcion que escribe una imagen nueva
+//ENTRADA: el nombre del archivo de salida, la matriz que representa los pixeles, las dimensiones de la imagen y la cantidad de elementos que se tomaron para el promedio
+//SALIDA: no posee retorno
 void writeIm(char *fileName, int **im, int height, int width, int m)
 {
 	FILE *out;
