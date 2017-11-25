@@ -7,16 +7,20 @@
 #include <ctype.h>
 #include <locale.h>
 #include <math.h>
+#include <time.h>
 #include "funciones.h"
 #include "funciones.c"
 
 
 int main(int argc, char **argv)
 {
-
-	int m=3;
-	int n=5;
-	int d=0;
+	clock_t start_t, end_t, total_t;
+	start_t = clock();
+	printf("Inicio: %ld\n", start_t);
+	int m=3; //Pixeles a promediar
+	int n=5; //Número de iteraciones
+	int d=0; //Imprimir o no por pantalla
+	int o=1; //Método a usar
 	char fileName[4096];
 	char outName[4096];
 	strcpy(fileName, "cuadro.bmp");
@@ -64,4 +68,9 @@ int main(int argc, char **argv)
 	}
 
 
+	end_t = clock();
+	printf("Fin: %ld\n", end_t);
+	total_t = (double) (end_t - start_t)/CLOCKS_PER_SEC;
+	printf("Tiempo de ejecución del método %d: %ld (s)\n", o, total_t);
+	return 0;
 }
