@@ -19,6 +19,7 @@ int i,j,z;
 	char outName[4096];
 	strcpy(fileName, "cuadro.bmp");
 	strcpy(outName, "out");
+	int d = 0;
 	FILE *in;		
 
 	in = fopen(fileName, "rb");		//Se abre la imagen
@@ -66,7 +67,7 @@ int i,j,z;
 	//METODO 1 
 
 
-	int m=2;
+	int m=3;
 	int n=20;
 	int filas=im_height;
 	int columnas=im_width;
@@ -90,10 +91,18 @@ int i,j,z;
 		}
 	}
 
+	for (i = 0; i < filas; ++i){
+		for (z = 0; z < columnas; ++z)
+		{
+			//printf("%d, ", im[i][z]);
+		}
+		//printf("\n");
+	}
+
 
 
 	for(i=0;i<filas;i++){
-		if(2==2){
+		if(i%2==0){
 			//printf("promedio fila par\n");		
 			//se recorren la fila de forma creciente
 			int posCorte=0;
@@ -104,25 +113,28 @@ int i,j,z;
 					//printf("posCorte=%d\n",posCorte);
 					suma=suma+im[i][j];
 					contador++;
-					posCorte++;
 				}
 				else{
 					//printf("%d||",(suma/m) );
+					if(d==1) printf("M!");
 					imReducida[i][posCorte]=(suma/m);
+					if(d==1) printf("(%d,%d)", i,posCorte);
 					contador=0;
 					suma=0;
 					posCorte++;
 				}
+				if(d==1) printf("(%d,%d)", i,j);
 			}
+			if(d==1) printf("\n");
 		}
-		/*if(i%2==1){
+		if(i%2!=0){
 			//printf("promedio fila impar\n");
 				int posCorte=(columnas/m)-1;
 				int aux=0;
 				int contador=0;
 				int suma=0;
 			//se recorren las filas de forma decreciente
-			for (j = (columnas/m)-1; j >= 0; --j){
+			for (j = columnas-1; j >= 0; --j){
 				if (contador<m){
 					//printf("posCorte=%d\n",posCorte);
 					suma=suma+im[i][j];
@@ -130,14 +142,17 @@ int i,j,z;
 				}
 				else{
 					//printf("%d||",(suma/m) );
+					if(d==1) printf("M!");
 					imReducida[i][aux]=(suma/m);
 					contador=0;
 					suma=0;
 					aux++;
 					posCorte--;
 				}
+				if(d==1) printf("(%d,%d)", i,j);
 			}
-		}*/
+			if(d==1) printf("\n");
+		}
 //printf("\n");
 
 	}
@@ -147,7 +162,6 @@ int i,j,z;
 	for (i = 0; i<54; i++){
 		int aux;
 		fread(&aux,1,1,in);
-		printf("%i\n", aux);
 		fwrite(&aux,1,1,out);
 	}
 
@@ -307,7 +321,6 @@ void reduccionPorFilas(int n, int m, int filas,int columnas, int **im,FILE *in){
 	for (int i = 0; i<54; i++){
 		int aux;
 		fread(&aux,1,1,in);
-		printf("%i\n", aux);
 		fwrite(&aux,1,1,out);
 	}
 
