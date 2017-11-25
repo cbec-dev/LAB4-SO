@@ -15,13 +15,14 @@ int main(int argc, char **argv)
 {
 
 	int m=3;
-	int n=3;
+	int n=5;
 	int d=0;
 	char fileName[4096];
 	char outName[4096];
 	strcpy(fileName, "cuadro.bmp");
 	strcpy(outName, "out");
 
+	if(d==1) printf("Estoy en la iteracion: 0\n");
 	//Se lee imagen de entrada
 	int **im = readIm(fileName);
 	//Se obtiene altura
@@ -44,6 +45,7 @@ int main(int argc, char **argv)
 	int k = 1;
 	while(k<n)
 	{
+		if(d==1) printf("Estoy en la iteracion: %d\n", k);
 		int **im = readIm(outName);
 		//Se obtiene altura
 		int im_height = getHeight(outName);
