@@ -7,9 +7,9 @@
 #include <ctype.h>
 #include <locale.h>
 #include <math.h>
+#include "funciones.h"
+#include "funciones.c"
 
-
-void reduccionPorFilas(int n, int m, int filas,int columnas, int **im,FILE *in);
 
 int main(int argc, char **argv)
 {
@@ -78,6 +78,14 @@ int i,j,z;
 
 	int **imReducida=NULL;
 	imReducida=(int **)malloc(sizeof(int*)*filas);
+	for (i = 0; i < filas; ++i){
+		imReducida[i]=(int*)malloc(sizeof(int)*(columnas/m));
+		for (z = 0; z < (columnas/m); ++z)
+		{
+			imReducida[i][z]=0;
+		}
+	}
+
 
 
 	int s=0;
@@ -91,73 +99,11 @@ int i,j,z;
 		}
 	}
 
-	for (i = 0; i < filas; ++i){
-		for (z = 0; z < columnas; ++z)
-		{
-			//printf("%d, ", im[i][z]);
-		}
-		//printf("\n");
-	}
+	imReducida = reduccion1(im, m, filas, columnas, d);
 
 
 
-	for(i=0;i<filas;i++){
-		if(i%2==0){
-			//printf("promedio fila par\n");		
-			//se recorren la fila de forma creciente
-			int posCorte=0;
-			int contador=0;
-			int suma=0;
-			for (j = 0; j <columnas ; ++j){
-				if (contador<m){
-					//printf("posCorte=%d\n",posCorte);
-					suma=suma+im[i][j];
-					contador++;
-				}
-				else{
-					//printf("%d||",(suma/m) );
-					if(d==1) printf("M!");
-					imReducida[i][posCorte]=(suma/m);
-					if(d==1) printf("(%d,%d)", i,posCorte);
-					contador=0;
-					suma=0;
-					posCorte++;
-				}
-				if(d==1) printf("(%d,%d)", i,j);
-			}
-			if(d==1) printf("\n");
-		}
-		if(i%2!=0){
-			//printf("promedio fila impar\n");
-				int posCorte=(columnas/m)-1;
-				int aux=0;
-				int contador=0;
-				int suma=0;
-			//se recorren las filas de forma decreciente
-			for (j = columnas-1; j >= 0; --j){
-				if (contador<m){
-					//printf("posCorte=%d\n",posCorte);
-					suma=suma+im[i][j];
-					contador++;
-				}
-				else{
-					//printf("%d||",(suma/m) );
-					if(d==1) printf("M!");
-					imReducida[i][aux]=(suma/m);
-					contador=0;
-					suma=0;
-					aux++;
-					posCorte--;
-				}
-				if(d==1) printf("(%d,%d)", i,j);
-			}
-			if(d==1) printf("\n");
-		}
-//printf("\n");
-
-	}
-
-
+	//Se escribe header BMP en archivo de salida
 	fseek(in, 0, SEEK_SET);
 	for (i = 0; i<54; i++){
 		int aux;
@@ -185,10 +131,7 @@ int i,j,z;
 	fwrite(&im_width_out,4,1,out);
 	fwrite(&im_height_out,4,1,out);
 
-	fseek(out, 38, SEEK_SET);	//SEEK hasta 38 donde está
-								//la información de resolución.
-	fwrite(&im_resx_out,4,1,out);
-	fwrite(&im_resy_out,4,1,out);
+
 
 	printf("Ancho Salida: %d\n", im_width_out);
    	printf("Alto Salida: %d\n", im_height_out);
@@ -196,81 +139,15 @@ int i,j,z;
    	printf("Resolución Y Salida: %d\n", im_resy_out);
 
 	fclose(out);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	fclose(in);
 
-	/*
-	//Se escribe header BMP en archivo de salida
-	FILE *out;
-	out = fopen(outName, "wb");
-	fseek(in, 0, SEEK_SET);
-	for (int i = 0; i<54; i++){
-		int aux;
-		fread(&aux,1,1,in);
-		//printf("%i\n", aux);
-		fwrite(&aux,1,1,out);
-	}
-
-	fclose(in);
-
-
-
-	//Se escribe imagen en archivo de salida
-   	for (int i = 0; i <im_height; ++i){			//Escribiendo imagen en archivo de salida
-		for (int j = 0; j < im_width; ++j){
-			fwrite(&im[i][j], 4, 1, out);
-		}
-	}
-
-	fclose(out);*/
 	return 0;
 
 }
 
 
+
+/*
 void reduccionPorFilas(int n, int m, int filas,int columnas, int **im,FILE *in){
 	FILE *out;
 	out = fopen("salida1", "w");
@@ -332,3 +209,5 @@ void reduccionPorFilas(int n, int m, int filas,int columnas, int **im,FILE *in){
 	}
 	fclose(out);
 }
+
+*/
