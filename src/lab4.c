@@ -47,8 +47,6 @@ int main(int argc, char **argv)
 
 
 
-
-
    	int **im = NULL;		//Declarando matriz imagen
    	im = malloc(sizeof(im)*im_height);
    	for(i = 0; i<im_height; i++)
