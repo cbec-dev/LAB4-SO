@@ -21,6 +21,7 @@ int main(int argc, char **argv)
 	char *fileName=NULL;
 	char *outName1=NULL;
 	char *outName2=NULL;
+	int psize = 0; 	//Tamaño de cada pixel
 
 
 
@@ -66,12 +67,14 @@ int main(int argc, char **argv)
 		}
 
 
+	psize = getPixelSize(fileName)/8;	//Se obtiene el tamaño de cada pixel antes de comenzar
+
 	//Método 1 (Primera iteración)
 	if(o==1 || o==3)
 	{
 		start_t1 = clock();	//Inicio del método 1.
 		//Se lee imagen de entrada
-		int **im1 = readIm(fileName);
+		int **im1 = readIm(fileName, psize);
 		//Se obtiene altura
 		int im_height1 = getHeight(fileName);
 		//Se obtiene ancho
@@ -87,10 +90,10 @@ int main(int argc, char **argv)
 		int **im_r2;
 		im_r1 = reduccion1(im1, m, im_height1, im_width1, outName1);
 		//Se escribe nueva imagen
-		writeIm(outName1, im_r1, im_height1, im_width1/m, m);
+		writeIm(outName1, im_r1, im_height1, im_width1/m, m, psize);
 
 		//Se escribe nuevo header
-		writeHeader(outName1, header_in1, im_height1, im_width1/m);
+		writeHeader(outName1, header_in1, im_height1, im_width1/m, psize);
 
 		//free(im_r1);
 		//free(im_r2);
@@ -112,7 +115,7 @@ int main(int argc, char **argv)
 	{
 		start_t2 = clock();	//Inicio del método 2.
 		//Se lee imagen de entrada
-		int **im2 = readIm(fileName);
+		int **im2 = readIm(fileName, psize);
 		//Se obtiene altura
 		int im_height2 = getHeight(fileName);
 		//Se obtiene ancho
@@ -129,10 +132,10 @@ int main(int argc, char **argv)
 		im_r2 = reduccion2(im2, m, im_height2, im_width2, outName2);
 
 		//Se escribe nueva imagen
-		writeIm(outName2, im_r2, im_height2/m, im_width2, m);
+		writeIm(outName2, im_r2, im_height2/m, im_width2, m, psize);
 
 		//Se escribe nuevo header
-		writeHeader(outName2, header_in2, im_height2/m, im_width2);
+		writeHeader(outName2, header_in2, im_height2/m, im_width2, psize);
 
 		//free(im_r1);
 		//free(im_r2);
@@ -159,8 +162,8 @@ int main(int argc, char **argv)
 			int **im_r1;
 			int **im_r2;
 			int im_height1, im_width1, im_height2, im_width2;
-			if(o==1) {im1 = readIm(outName1);}
-			if(o==2) {im2 = readIm(outName2);}
+			if(o==1) {im1 = readIm(outName1, psize);}
+			if(o==2) {im2 = readIm(outName2, psize);}
 			//Se obtiene altura
 			if(o==1) {im_height1 = getHeight(outName1);}
 			if(o==2) {im_height2 = getHeight(outName2);}
@@ -178,12 +181,12 @@ int main(int argc, char **argv)
 
 
 			//Se escribe nueva imagen
-			if(o==1) writeIm(outName1, im_r1, im_height1, im_width1/m, m);
-			if(o==2) writeIm(outName2, im_r2, im_height2/m, im_width2, m);
+			if(o==1) writeIm(outName1, im_r1, im_height1, im_width1/m, m, psize);
+			if(o==2) writeIm(outName2, im_r2, im_height2/m, im_width2, m, psize);
 
 			//Se escribe nuevo header
-			if(o==1) writeHeader(outName1, header_in, im_height1, im_width1/m);
-			if(o==2) writeHeader(outName2, header_in, im_height2/m, im_width2);
+			if(o==1) writeHeader(outName1, header_in, im_height1, im_width1/m, psize);
+			if(o==2) writeHeader(outName2, header_in, im_height2/m, im_width2, psize);
 
 			//free(im_r1);
 			//free(im_r2);
@@ -214,7 +217,7 @@ int main(int argc, char **argv)
 			int **im1;
 			int **im_r1;
 			int im_height1, im_width1;
-			im1 = readIm(outName1);
+			im1 = readIm(outName1, psize);
 			//Se obtiene altura
 			im_height1 = getHeight(outName1);
 			//Se obtiene ancho
@@ -228,10 +231,10 @@ int main(int argc, char **argv)
 
 
 			//Se escribe nueva imagen
-			writeIm(outName1, im_r1, im_height1, im_width1/m, m);
+			writeIm(outName1, im_r1, im_height1, im_width1/m, m, psize);
 
 			//Se escribe nuevo header
-			writeHeader(outName1, header_in1, im_height1, im_width1/m);
+			writeHeader(outName1, header_in1, im_height1, im_width1/m, psize);
 
 			//free(im_r1);
 			//free(im_r2);
@@ -251,7 +254,7 @@ int main(int argc, char **argv)
 			int **im_r1;
 			int **im_r2;
 			int im_height2, im_width2;
-			im2 = readIm(outName2);
+			im2 = readIm(outName2, psize);
 			//Se obtiene altura
 			im_height2 = getHeight(outName2);
 			//Se obtiene ancho
@@ -265,10 +268,10 @@ int main(int argc, char **argv)
 
 
 			//Se escribe nueva imagen
-			writeIm(outName2, im_r2, im_height2/m, im_width2, m);
+			writeIm(outName2, im_r2, im_height2/m, im_width2, m, psize);
 
 			//Se escribe nuevo header
-			writeHeader(outName2, header_in2, im_height2/m, im_width2);
+			writeHeader(outName2, header_in2, im_height2/m, im_width2, psize);
 
 			//free(im_r1);
 			//free(im_r2);

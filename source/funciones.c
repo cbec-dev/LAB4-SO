@@ -142,7 +142,7 @@ int **reduccion2(int **im, int m, int filas, int columnas, char *outName)
 //DESCRIPCION: funcion que lee una imagen y guarda los pixeles correspondientes
 //ENTRADA: el nombre dle archivo de entrada
 //SALIDA: una matriz de entero que representa los pixeles
-int **readIm(char *fileName)
+int **readIm(char *fileName, int psize)
 {
 	FILE *in;
 	in = fopen(fileName, "rb");		//Se abre la imagen
@@ -152,7 +152,7 @@ int **readIm(char *fileName)
 
 
 	//LEER HEADER
-	fseek(in, 18, SEEK_SET);	//SEEK hasta 16 donde está
+	fseek(in, 18, SEEK_SET);	//SEEK hasta 18 donde está
 								//la información de ancho y alto.
 	fread(&im_width,4,1,in);
 	fread(&im_height,4,1,in);
@@ -168,7 +168,7 @@ int **readIm(char *fileName)
 
    	for (i = 0; i <im_height; ++i){			//Guardando valores de cada pixel
 		for (j = 0; j < im_width; ++j){
-			fread(&im[i][j],3,1,in);
+			fread(&im[i][j],psize,1,in);
 		}
 	}
 
@@ -188,7 +188,7 @@ int getHeight(char *fileName)
 
 
 	//LEER HEADER
-	fseek(in, 18, SEEK_SET);	//SEEK hasta 16 donde está
+	fseek(in, 18, SEEK_SET);	//SEEK hasta 18 donde está
 								//la información de ancho y alto.
 	fread(&im_width,4,1,in);
 	fread(&im_height,4,1,in);
@@ -209,13 +209,32 @@ int getWidth(char *fileName)
 
 
 	//LEER HEADER
-	fseek(in, 18, SEEK_SET);	//SEEK hasta 16 donde está
+	fseek(in, 18, SEEK_SET);	//SEEK hasta 18 donde está
 								//la información de ancho y alto.
 	fread(&im_width,4,1,in);
 	fread(&im_height,4,1,in);
 
 	fclose(in);
 	return im_width;
+}
+
+//DESCRIPCION: funcion que obtiene la altura correspondiente a una imagen
+//ENTRADA: el nombre de la imagen
+//SALIDA: un entero correspondiente a la altura
+int getPixelSize(char *fileName)
+{
+	FILE *in;
+	in = fopen(fileName, "rb");		//Se abre la imagen
+	int size;		// Para guardar el tamaño del pixel
+
+
+	//LEER HEADER
+	fseek(in, 28, SEEK_SET);	//SEEK hasta 28 donde está
+								//la información de tamaño de pixel.
+	fread(&size,2,1,in);
+	
+	fclose(in);
+	return size;
 }
 
 //DESCRIPCION: funcion que obtiene el header de una imagen bmp
@@ -244,11 +263,13 @@ int *getHeader(char *fileName)
 //DESCRIPCION: funcion que escribe un nuevo header para la imagen reducida
 //ENTRADA: el nombre de la imagen, el header anterior las nuevas dimensiones de alto y ancho
 //SALIDA: no posee retorno
-void writeHeader(char *fileName, int *header, int height, int width)
+void writeHeader(char *fileName, int *header, int height, int width, int psize)
 {
 	FILE *out;
 	out = fopen(fileName, "rb+");		//Se abre salida
 	int i;
+	int psizeB = psize*8;
+
 
 
 	fseek(out, 0, SEEK_SET);
@@ -262,13 +283,17 @@ void writeHeader(char *fileName, int *header, int height, int width)
 								//la información de ancho y alto.
 	fwrite(&width,4,1,out);
 	fwrite(&height,4,1,out);
+
+	fseek(out, 28, SEEK_SET);	//SEEK hasta 28 donde está
+								//la información de tamaño de pixel.
+	fwrite(&psizeB,2,1,out);
 	fclose(out);
 }
 
 //DESCRIPCION: funcion que escribe una imagen nueva
 //ENTRADA: el nombre del archivo de salida, la matriz que representa los pixeles, las dimensiones de la imagen y la cantidad de elementos que se tomaron para el promedio
 //SALIDA: no posee retorno
-void writeIm(char *fileName, int **im, int height, int width, int m)
+void writeIm(char *fileName, int **im, int height, int width, int m, int psize)
 {
 	FILE *out;
 	out = fopen(fileName, "wb");		//Se abre salida
@@ -278,7 +303,7 @@ void writeIm(char *fileName, int **im, int height, int width, int m)
 	fseek(out, 54, SEEK_SET);
    	for (int i = 0; i <height; ++i){			//Escribiendo imagen en archivo de salida
 		for (j = 0; j < width; ++j){
-			fwrite(&im[i][j], 3, 1, out);
+			fwrite(&im[i][j], psize, 1, out);
 		}
 	}
 	fclose(out);
