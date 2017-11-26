@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 		}
 
 
-	psize = getPixelSize(fileName)/8;	//Se obtiene el tamaño de cada pixel antes de comenzar
+	psize = getPixelSize(fileName);	//Se obtiene el tamaño de cada pixel antes de comenzar
 
 	//Método 1 (Primera iteración)
 	if(o==1 || o==3)

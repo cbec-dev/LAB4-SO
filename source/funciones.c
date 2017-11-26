@@ -218,9 +218,9 @@ int getWidth(char *fileName)
 	return im_width;
 }
 
-//DESCRIPCION: funcion que obtiene la altura correspondiente a una imagen
+//DESCRIPCION: funcion que obtiene el tamaño de cada pixel correspondiente a una imagen
 //ENTRADA: el nombre de la imagen
-//SALIDA: un entero correspondiente a la altura
+//SALIDA: un entero correspondiente al tamaño de cada pixel
 int getPixelSize(char *fileName)
 {
 	FILE *in;
@@ -234,6 +234,7 @@ int getPixelSize(char *fileName)
 	fread(&size,2,1,in);
 	
 	fclose(in);
+	size = size/8;
 	return size;
 }
 
